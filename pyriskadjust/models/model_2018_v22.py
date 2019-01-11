@@ -50,119 +50,6 @@ INTERACTION_VARIABLE_DESCRIPTIONS = {
 
 INTERACTION_VARIABLES = INTERACTION_VARIABLE_DESCRIPTIONS.keys()
 
-# CODING_INTENSITY_NORMALIZATION = 1.017
-
-
-def explain_score(score_components):
-    """Given a dictionay of model coefficients and scores, returns
-    a more verbose explanation of what the coefficients mean, and
-    how the individual components contribute to the overall score
-
-    Arguments:
-        score_components {dict} -- A dictionary of coefficients of the form
-            {"coefficient_name" : coefficient_value}
-        Intended to be called on the result of compute_risk_score_componenents
-
-    Returns:
-        dict -- A dictionary with more info, of the form
-        {
-             "total": number,
-            "demographic_components": [{
-                "variable_name" : name of the coefficient,
-                "description" : human readable description of what the coefficient means,
-                "score" : magnitude of the coefficient
-            }],
-            "hcc_components": [{
-                "variable_name" : name of the coefficient,
-                "description" : human readable description of what the coefficient means,
-                "score" : magnitude of the coefficient
-            }],
-            "interaction_components": [{
-                "variable_name" : name of the coefficient,
-                "description" : human readable description of what the coefficient means,
-                "score" : magnitude of the coefficient
-            }],
-        }
-    """
-    output = {
-        "total": round(sum(score_components.values()), 3),
-        "demographic_components": [],
-        "hcc_components": [],
-        "interaction_components": [],
-    }
-    # output["normalized_total"] = output["total"] / CODING_INTENSITY_NORMALIZATION
-
-    demographic_regex = re.compile(
-        """
-        \S*                     # any chars
-        (?P<sex>m|f)            # sex
-        (?P<age_lo>\d{1,2})     # lower age limit
-        (_                      # optional underscore
-        (?P<age_hi>\d{1,2}|gt)  # optional upper age limit
-        )?$
-        """,
-        re.VERBOSE,
-    )
-    interaction_regex = re.compile(
-        """
-        \S*                     # any
-        (?P<var_name>{})$       # name of interaction variables
-        """.format(
-            "|".join(INTERACTION_VARIABLES)
-        ),
-        re.VERBOSE,
-    )
-    hcc_regex = re.compile(
-        """
-        ^(?P<model_abbr>{})      # model abbreviation
-        \_hcc
-        (?P<hcc>\d+)$           # hcc number
-        """.format(
-            "|".join(MODEL_ABBREVIATIONS)
-        ),
-        re.VERBOSE,
-    )
-    for component, score in score_components.items():
-        m = re.match(demographic_regex, component)
-        if m:
-            sex = m.group("sex")
-            age_lo = m.group("age_lo")
-            age_hi = m.group("age_hi")
-            description = "{} with age ".format("Male" if sex == "m" else "Female")
-            if age_hi == "gt":
-                description += " greater than {}".format(age_lo)
-            elif age_hi:
-                description += "in range {} to {}".format(age_lo, age_hi)
-            else:
-                description += "equal to {}".format(age_lo)
-
-            output["demographic_components"].append(
-                {"variable_name": component, "score": score, "description": description}
-            )
-
-        m = re.match(interaction_regex, component)
-        if m:
-            output["interaction_components"].append(
-                {
-                    "variable_name": component,
-                    "score": score,
-                    "description": INTERACTION_VARIABLE_DESCRIPTIONS.get(
-                        m.group("var_name"), "unknown"
-                    ),
-                }
-            )
-
-        m = re.match(hcc_regex, component)
-        if m:
-            output["hcc_components"].append(
-                {
-                    "variable_name": component,
-                    "score": score,
-                    "description": HCC_LABELS[int(m.group("hcc"))],
-                }
-            )
-    return output
-
 
 def compute_risk_score_components(
     diagnoses,
@@ -417,3 +304,115 @@ def diagnoses_to_hccs(diagnoses, age, sex):
         hccs.difference_update(HCC_HIERARCHY.get(cc, []))
 
     return hccs
+
+
+# CODING_INTENSITY_NORMALIZATION = 1.017
+def explain_score(score_components):
+    """Given a dictionay of model coefficients and scores, returns
+    a more verbose explanation of what the coefficients mean, and
+    how the individual components contribute to the overall score
+
+    Arguments:
+        score_components {dict} -- A dictionary of coefficients of the form
+            {"coefficient_name" : coefficient_value}
+        Intended to be called on the result of compute_risk_score_componenents
+
+    Returns:
+        dict -- A dictionary with more info, of the form
+        {
+             "total": number,
+            "demographic_components": [{
+                "variable_name" : name of the coefficient,
+                "description" : human readable description of what the coefficient means,
+                "score" : magnitude of the coefficient
+            }],
+            "hcc_components": [{
+                "variable_name" : name of the coefficient,
+                "description" : human readable description of what the coefficient means,
+                "score" : magnitude of the coefficient
+            }],
+            "interaction_components": [{
+                "variable_name" : name of the coefficient,
+                "description" : human readable description of what the coefficient means,
+                "score" : magnitude of the coefficient
+            }],
+        }
+    """
+    output = {
+        "total": round(sum(score_components.values()), 3),
+        "demographic_components": [],
+        "hcc_components": [],
+        "interaction_components": [],
+    }
+    # output["normalized_total"] = output["total"] / CODING_INTENSITY_NORMALIZATION
+
+    demographic_regex = re.compile(
+        """
+        \S*                     # any chars
+        (?P<sex>m|f)            # sex
+        (?P<age_lo>\d{1,2})     # lower age limit
+        (_                      # optional underscore
+        (?P<age_hi>\d{1,2}|gt)  # optional upper age limit
+        )?$
+        """,
+        re.VERBOSE,
+    )
+    interaction_regex = re.compile(
+        """
+        \S*                     # any
+        (?P<var_name>{})$       # name of interaction variables
+        """.format(
+            "|".join(INTERACTION_VARIABLES)
+        ),
+        re.VERBOSE,
+    )
+    hcc_regex = re.compile(
+        """
+        ^(?P<model_abbr>{})      # model abbreviation
+        \_hcc
+        (?P<hcc>\d+)$           # hcc number
+        """.format(
+            "|".join(MODEL_ABBREVIATIONS)
+        ),
+        re.VERBOSE,
+    )
+    for component, score in score_components.items():
+        m = re.match(demographic_regex, component)
+        if m:
+            sex = m.group("sex")
+            age_lo = m.group("age_lo")
+            age_hi = m.group("age_hi")
+            description = "{} with age ".format("Male" if sex == "m" else "Female")
+            if age_hi == "gt":
+                description += " greater than {}".format(age_lo)
+            elif age_hi:
+                description += "in range {} to {}".format(age_lo, age_hi)
+            else:
+                description += "equal to {}".format(age_lo)
+
+            output["demographic_components"].append(
+                {"variable_name": component, "score": score, "description": description}
+            )
+
+        m = re.match(interaction_regex, component)
+        if m:
+            output["interaction_components"].append(
+                {
+                    "variable_name": component,
+                    "score": score,
+                    "description": INTERACTION_VARIABLE_DESCRIPTIONS.get(
+                        m.group("var_name"), "unknown"
+                    ),
+                }
+            )
+
+        m = re.match(hcc_regex, component)
+        if m:
+            output["hcc_components"].append(
+                {
+                    "variable_name": component,
+                    "score": score,
+                    "description": HCC_LABELS[int(m.group("hcc"))],
+                }
+            )
+    return output
