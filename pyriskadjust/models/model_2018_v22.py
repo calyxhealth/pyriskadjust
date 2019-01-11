@@ -54,7 +54,36 @@ INTERACTION_VARIABLES = INTERACTION_VARIABLE_DESCRIPTIONS.keys()
 
 
 def explain_score(score_components):
+    """Given a dictionay of model coefficients and scores, returns
+    a more verbose explanation of what the coefficients mean, and
+    how the individual components contribute to the overall score
 
+    Arguments:
+        score_components {dict} -- A dictionary of coefficients of the form
+            {"coefficient_name" : coefficient_value}
+        Intended to be called on the result of compute_risk_score_componenents
+
+    Returns:
+        dict -- A dictionary with more info, of the form
+        {
+             "total": number,
+            "demographic_components": [{
+                "variable_name" : name of the coefficient,
+                "description" : human readable description of what the coefficient means,
+                "score" : magnitude of the coefficient
+            }],
+            "hcc_components": [{
+                "variable_name" : name of the coefficient,
+                "description" : human readable description of what the coefficient means,
+                "score" : magnitude of the coefficient
+            }],
+            "interaction_components": [{
+                "variable_name" : name of the coefficient,
+                "description" : human readable description of what the coefficient means,
+                "score" : magnitude of the coefficient
+            }],
+        }
+    """
     output = {
         "total": round(sum(score_components.values()), 3),
         "demographic_components": [],
