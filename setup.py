@@ -44,7 +44,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/matulef/pyriskadjust',
+    url='https://github.com/calyxhealth/pyriskadjust',
     version='0.8.0',
     zip_safe=False,
 )
