@@ -33,7 +33,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="A python implementation of CMS's Medicare Risk Adjustment model",
+    description="A python implementation of CMS's Medicare Risk Adjustment model based on Hierarchical Condition Categories (HCCs)",
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
