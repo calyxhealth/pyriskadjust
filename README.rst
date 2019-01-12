@@ -18,6 +18,7 @@ Python Risk Adjustment
 
 A python implementation of CMS's Medicare Risk Adjustment model based on Hierarchical Condition Categories (HCCs)
 
+https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html
 
 * Free software: MIT license
 * Documentation: https://pyriskadjust.readthedocs.io.
