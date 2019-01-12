@@ -4,4 +4,4 @@
 
 __author__ = """Kevin Matulef"""
 __email__ = 'kevin@calyxhealth.com'
-__version__ = '0.8.1'
+__version__ = '0.8.2'
