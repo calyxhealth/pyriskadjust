@@ -6,8 +6,8 @@ Python Risk Adjustment
 .. image:: https://img.shields.io/pypi/v/pyriskadjust.svg
         :target: https://pypi.python.org/pypi/pyriskadjust
 
-.. image:: https://img.shields.io/travis/matulef/pyriskadjust.svg
-        :target: https://travis-ci.org/matulef/pyriskadjust
+.. image:: https://travis-ci.com/calyxhealth/pyriskadjust.svg?branch=master
+        :target: https://travis-ci.com/calyxhealth/pyriskadjust
 
 .. image:: https://readthedocs.org/projects/pyriskadjust/badge/?version=latest
         :target: https://pyriskadjust.readthedocs.io/en/latest/?badge=latest
