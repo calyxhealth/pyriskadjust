@@ -1,10 +1,10 @@
 """Model implements CMS-HCC software V2218.79.O1"""
 
 import re
-from icd_mapping.mapping_2018_v22 import ICD_MAPPING
-from hccs.hccs_v22 import HCC_HIERARCHY
-from hccs.hccs_v22 import HCC_LABELS
-from coefficients.coefficients_2018_v22 import COEFFICIENTS
+from pyriskadjust.icd_mapping.mapping_2018_v22 import ICD_MAPPING
+from pyriskadjust.hccs.hccs_v22 import HCC_HIERARCHY
+from pyriskadjust.hccs.hccs_v22 import HCC_LABELS
+from pyriskadjust.coefficients.coefficients_2018_v22 import COEFFICIENTS
 
 
 MODEL_DESCRIPTIONS = {
