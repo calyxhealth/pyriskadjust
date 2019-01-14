@@ -229,7 +229,7 @@ def compute_risk_score_components(
         if v in COEFFICIENTS:
             output[v] = COEFFICIENTS[v]
         else:
-            raise ValueError("Interaction coefficient not found")
+            print("Warning, interaction coefficient not found: {}".format(v))
 
     return output
 
