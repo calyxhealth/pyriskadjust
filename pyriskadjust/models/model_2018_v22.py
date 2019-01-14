@@ -5,6 +5,7 @@ from pyriskadjust.icd_mapping.mapping_2018_v22 import ICD_MAPPING
 from pyriskadjust.hccs.hccs_v22 import HCC_HIERARCHY
 from pyriskadjust.hccs.hccs_v22 import HCC_LABELS
 from pyriskadjust.coefficients.coefficients_2018_v22 import COEFFICIENTS
+from datetime import datetime
 
 
 MODEL_DESCRIPTIONS = {
@@ -416,3 +417,24 @@ def explain_score(score_components):
                 }
             )
     return output
+
+
+def get_age_in_model_year(dob, model_year):
+    """Gets the age of a patient relative to Feb 1 of a given model year
+
+    Arguments:
+        dob {datetime.datetime | string} -- dob as a datetime or string in format 'YYYY-MM-DD'
+        model_year {int} -- Year as
+
+    Returns:
+        int -- age as an integer
+    """
+
+    if type(dob) == str:
+        dob = datetime.strptime(dob, "%Y-%m-%d")
+    as_of_date = datetime(year=model_year, month=2, day=1)
+    return (
+        as_of_date.year
+        - dob.year
+        - ((as_of_date.month, as_of_date.day) < (dob.month, dob.day))
+    )
