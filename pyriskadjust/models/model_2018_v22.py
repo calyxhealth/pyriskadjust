@@ -6,7 +6,7 @@ from pyriskadjust.hccs.hccs_v22 import HCC_HIERARCHY
 from pyriskadjust.hccs.hccs_v22 import HCC_LABELS
 from pyriskadjust.coefficients.coefficients_2018_v22 import COEFFICIENTS
 from datetime import datetime
-
+import logging
 
 MODEL_DESCRIPTIONS = {
     "cna": "Community Non-Dual Aged",
@@ -75,9 +75,6 @@ def compute_risk_score_components(
         original_entitlement_reason {int} -- Original entitlement reason. 0 = Old Age, 1 = Disability, 2 = End Stage Renal Disease, 3 = both Disability and ESRD (default: {0})
         model {str} -- Abbreviation for the model to use (default: {"cna"})
 
-    Raises:
-        ValueError -- if model coefficient isn't found
-
     Returns:
         dict -- Dictionary of the form 
         {
@@ -114,7 +111,11 @@ def compute_risk_score_components(
         if demographic_var in COEFFICIENTS:
             output[demographic_var] = COEFFICIENTS[demographic_var]
         else:
-            raise ValueError("No demographic coefficient found for new enrollee")
+            logging.warning(
+                "Demographic coefficient not found for patient with age {} and sex {}: {}".format(
+                    age, sex, demographic_var
+                )
+            )
         return output
 
     # --------- For all other models -----------------------------------
@@ -124,7 +125,11 @@ def compute_risk_score_components(
     if demographic_var in COEFFICIENTS:
         output[demographic_var] = COEFFICIENTS[demographic_var]
     else:
-        raise ValueError("No demographic coefficient found for model")
+        logging.warning(
+            "Demographic coefficient not found for patient with age {} and sex {}: {}".format(
+                age, sex, demographic_var
+            )
+        )
 
     # Now compute the relevant HCCs
     hccs = diagnoses_to_hccs(diagnoses, age, sex)
@@ -133,7 +138,7 @@ def compute_risk_score_components(
         if v in COEFFICIENTS:
             output[v] = COEFFICIENTS[v]
         else:
-            raise ValueError("HCC coefficient not found")
+            logging.warning("HCC coefficient not found: {}".format(v))
 
     # Now compute the interaction components
     interaction_vars = []
@@ -230,7 +235,7 @@ def compute_risk_score_components(
         if v in COEFFICIENTS:
             output[v] = COEFFICIENTS[v]
         else:
-            print("Warning, interaction coefficient not found: {}".format(v))
+            logging.warning("Warning, interaction coefficient not found: {}".format(v))
 
     return output
 
