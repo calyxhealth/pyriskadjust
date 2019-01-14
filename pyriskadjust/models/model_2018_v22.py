@@ -67,7 +67,7 @@ def compute_risk_score_components(
     Arguments:
         diagnoses {[list]} -- List of ICD-10 codes, as strings
         age {int} -- patient's age, as integer. This should be computed as of Feb 1 for a given model year
-        sex {int} -- 1=male, 2=femail
+        sex {int} -- 1=male, 2=female
 
     Keyword Arguments:
         long_term_institutional_in_medicaid {bool} -- True if number of months in Medicaid in payment year > 0. This is only relevant to the Institutional model (default: {False})
