@@ -8,16 +8,17 @@ import json
 files = [
     # format is (input_name, output_name)
     ("C2110H2R", "2018_v21"),
-    ("C2214O5P", "2018_v22")
+    ("C2214O5P", "2018_v22"),
+    ("C2318P1Q", "2019_v23")
 ]
 # fmt: on
 
-output_dir = "../../py_risk_adjustment/coefficients/"
+output_dir = "../../pyriskadjust/coefficients/"
 for (inname, outname) in files:
     with open(inname + ".csv") as f:
         header = f.readline().strip().replace('"', "").split(",")
         vals = map(float, f.readline().strip().split(","))
-        coefficient_mapping = dict(zip(header, vals))
+        coefficient_mapping = dict(zip([coeff.lower() for coeff in header], vals))
 
         # uncomment to generate json as well
         # with open(output_dir + "coefficients_" + outname + ".json", "w") as fo:
