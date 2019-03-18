@@ -3,7 +3,7 @@
 from pyriskadjust.icd_mapping.mapping_2019_v23 import ICD_MAPPING
 from pyriskadjust.hccs.hccs_v23 import HCC_HIERARCHY
 from pyriskadjust.hccs.hccs_v23 import HCC_LABELS
-from pyriskadjust.coefficients.coefficients_v2019_v23 import COEFFICIENTS
+from pyriskadjust.coefficients.coefficients_2019_v23 import COEFFICIENTS
 from pyriskadjust.models.common import (
     MODEL_DESCRIPTIONS,
     MODEL_ABBREVIATIONS,
