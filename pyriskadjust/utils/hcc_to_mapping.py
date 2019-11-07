@@ -1,5 +1,5 @@
-from pyriskadjust.icd_mapping.mapping_2019_v23 import ICD_MAPPING
-from pyriskadjust.hccs.hccs_v23 import HCC_LABELS
+from pyriskadjust.icd_mapping.mapping_2020_v24 import ICD_MAPPING
+from pyriskadjust.hccs.hccs_v24 import HCC_LABELS
 
 import json
 
@@ -8,5 +8,5 @@ for icd, hccs in ICD_MAPPING.items():
     for hcc in hccs:
         output[hcc].append(icd)
 
-with open("hcc_to_icd_2018.json", "w") as f:
+with open("hcc_to_icd_2020.json", "w") as f:
     json.dump(output, f, indent=4)
