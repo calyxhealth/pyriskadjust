@@ -9,11 +9,12 @@ files = [
     # format is (input_name, output_name)
     ("F2118H1R", "2018_v21"),
     ("F2218O1P", "2018_v22"),
-    ("F2318P1Q", "2019_v23")
+    ("F2318P1Q", "2019_v23"),
+    ("F2419P1M", "2020_v24")
 ]
 # fmt: on
 
-output_dir = "../../py_risk_adjustment/icd_mapping/"
+output_dir = "../../pyriskadjust/icd_mapping/"
 for (inname, outname) in files:
     with open(inname + ".TXT") as f:
         d = defaultdict(list)
