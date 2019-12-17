@@ -37,7 +37,8 @@ def get_age_sex_string(age, sex, new_enrollee=False):
 
 
 def _diagnoses_to_hccs(icd_mapping, hcc_hierachy, diagnoses, age, sex):
-    """Returns a list of hierachical condition categories, implied by a set of diagnoses
+    """Returns a list of hierarchical condition categories, implied by a set of
+     diagnoses
 
     Arguments:
         diagnoses {[string]} -- A list of ICD-10 codes
@@ -78,7 +79,8 @@ def _diagnoses_to_hccs(icd_mapping, hcc_hierachy, diagnoses, age, sex):
             # If not special case, default to general mapping
             hccs.update(icd_mapping.get(d, []))
 
-    # remove HCCs that are already implied by more specific categories in the hierachy
+    # remove HCCs that are already implied by more specific categories in the
+    # hierarchy
     for cc in hccs.copy():
         hccs.difference_update(hcc_hierachy.get(cc, []))
 
@@ -109,14 +111,14 @@ def get_age_in_model_year(dob, model_year):
 def _explain_score(
     model_abbreviations, interaction_var_descriptions, hcc_labels, score_components
 ):
-    """Given a dictionay of model coefficients and scores, returns
+    """Given a dictionary of model coefficients and scores, returns
     a more verbose explanation of what the coefficients mean, and
     how the individual components contribute to the overall score
 
     Arguments:
         score_components {dict} -- A dictionary of coefficients of the form
             {"coefficient_name" : coefficient_value}
-        Intended to be called on the result of compute_risk_score_componenents
+        Intended to be called on the result of compute_risk_score_components
 
     Returns:
         dict -- A dictionary with more info, of the form
