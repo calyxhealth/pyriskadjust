@@ -7,6 +7,7 @@
 import unittest
 import json
 from pyriskadjust.models import model_2018_v22
+from pyriskadjust.models import common
 
 
 class TestPyriskadjust(unittest.TestCase):
@@ -73,3 +74,35 @@ class TestPyriskadjust(unittest.TestCase):
                 sort_keys=True,
             ),
         )
+
+
+class TestCommon(unittest.TestCase):
+    """Tests for functions in common.py."""
+
+    def setUp(self):
+        """Set up test fixtures, if any."""
+        self.icd_mapping = {
+            "A010": [0],
+            "A011": [1, 2],
+            "B010": [10],
+            "B011": [11, 12]
+        }
+        self.hcc_hierarchy = {
+            0: [1, 2],
+            10: [11, 12],
+        }
+
+    def tearDown(self):
+        """Tear down test fixtures, if any."""
+
+    def test_diagnoses_to_hccs(self):
+        out = common._diagnoses_to_hccs(
+            icd_mapping=self.icd_mapping, hcc_hierachy=self.hcc_hierarchy,
+            diagnoses=['A010', 'B010'], age=70, sex='M')
+        self.assertEqual(out, {0, 10})
+
+    def test_diagnoses_to_hccs_respects_hierarchy(self):
+        out = common._diagnoses_to_hccs(
+            icd_mapping=self.icd_mapping, hcc_hierachy=self.hcc_hierarchy,
+            diagnoses=['A010', 'A011'], age=70, sex='M')
+        self.assertEqual(out, {0})
